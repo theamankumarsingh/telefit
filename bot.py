@@ -79,4 +79,4 @@ def default(message):
     bot.reply_to(message, 'I did not understand '+'\N{confused face}')
 
 
-bot.infinity_polling()
+bot.bot.infinity_polling(timeout=10, long_polling_timeout = 5)
