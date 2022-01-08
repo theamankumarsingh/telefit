@@ -1,9 +1,12 @@
 import os
 from os import environ
+from dotenv import load_dotenv
 import telebot
 import requests
 import json
 import csv
+
+load_dotenv()  # take environment variables from .env.
 
 # TODO: 1.1 Add Request HTTP URL of the API
 NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
