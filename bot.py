@@ -43,15 +43,23 @@ def setUser(message):
     global user
     usr_input = message.text[6:]
     # TODO: 2.1 Set user data
+    userdata=usr_input
     bot.reply_to(message, 'User set!')
     reply = ''
     # TODO: 2.2 Display user details in the telegram chat
+    
     bot.send_message(message.chat.id, reply)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['nutrition'])
 def getNutrition(message):
-    bot.reply_to(message, 'Getting nutrition info...')
+     query={"query": message.text}
+     response= requests.post("https://trackapi.nutritionix.com/v2/natural/nutrients", headers=headers ,json=query)
+     bot.send_message(response) 
+    
+     
+   
+    
     # TODO: 1.2 Get nutrition information from the API
     # TODO: 1.3 Display nutrition data in the telegram chat
     # TODO: 3.2 Dump data in a CSV file
