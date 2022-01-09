@@ -25,11 +25,17 @@ def greet(message):
     global botRunning
     botRunning = True
     # TODO: 3.1 Add CSV file creation
-    global foodFile, workoutFile
-    foodFile = open('food.csv', 'w', newline='')
-    workoutFile = open('workout.csv', 'w', newline='')
+    foodFile = open('food.csv', 'w+', newline='')
+    foodFileWrite = csv.writer(foodFile)
+    foodFileWrite.writerow(
+        ['Food-Name', 'Quantity', 'Calories', 'Fat', 'Carbohydrates', 'Protein'])
+    foodFile.close()
+    workoutFile = open('workout.csv', 'w+', newline='')
+    workoutFileWrite = csv.writer(workoutFile)
+    workoutFileWrite.writerow(['Exercise-Name', 'Duration', 'Calories-Burned'])
+    workoutFile.close()
     bot.reply_to(
-        message, 'Hello! I am TeleFit. Use me to monitor your health'+Stage 4: OPTIONAL(Get extra karma points) Deploy the bot to Heroku.'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
+        message, 'Hello! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
 
 
 @bot.message_handler(commands=['stop', 'bye'])
@@ -85,11 +91,12 @@ def getNutrition(message):
     bot.reply_to(
         message, f"So.. Your Dietary values are out.. Check it out \nFood Name: {foodDetails['foodName']} \nQuantity: {foodDetails['quantity']} \nCalories: {foodDetails['calories']} \nFat: {foodDetails['fat']} \nCarbohydrate: {foodDetails['carbohydrate']} \nProtein: {foodDetails['protein']}")
     # TODO: 3.2 Dump data in a CSV file
+
+    foodFile = open('food.csv', 'a')
     foodFileWrite = csv.writer(foodFile)
     foodFileWrite.writerow(
-        ['Food-Name', 'Quantity', 'Calories', 'Fat', 'Carbohydrates', 'Protein'])
-    foodFileWrite.writerow(
         [foodDetails['foodName'], foodDetails['quantity'], foodDetails['calories'], foodDetails['fat'], foodDetails['carbohydrate'], foodDetails['protein']])
+    foodFile.close()
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
@@ -113,10 +120,12 @@ def getCaloriesBurn(message):
     bot.reply_to(
         message, f"Exercise Name: {workoutDetails['exerciseName']} \nDuration: {workoutDetails['durationMin']} minutes \nCalories: {workoutDetails['calories']}")
     # TODO: 3.3 Dump data in a CSV file
-    workoutFileWrite = csv.writer(workoutFile)
-    workoutFileWrite.writerow(['Exercise-Name', 'Duration', 'Calories-Burned'])
+
+    workoutFile = open('workout.csv', 'a')
+    workoutFileWrite = csv.writer(workoutFIle)
     workoutFileWrite.writerow([workoutDetails['exerciseName'],
                               workoutDetails['durationMin'], workoutDetails['calories']])
+    workoutFile.close()
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
