@@ -119,7 +119,7 @@ def getCaloriesBurn(message):
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Generating report...')
-    # 3.4 Send downlodable CSV file to telegram chat
+    # 3.4 Send the downlodable CSV file to telegram chat
     usr_input = message.text[9:]
     chatid = message.chat.id
     fileN = open("nutrition_records.csv","rb")
@@ -139,5 +139,6 @@ def default(message):
     bot.reply_to(message, 'I did not understand '+'\N{confused face}')
     
 
-
 bot.infinity_polling()
+
+
