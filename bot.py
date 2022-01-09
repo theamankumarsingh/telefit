@@ -52,11 +52,11 @@ def setUser(message):
     global user
     usr_input = message.text[6:].split(',')
     try:
-      user["name"]=usr_input[0]
-      user["gender"]=usr_input[1]
-      user["weight"]=usr_input[2]
-      user["height"]=usr_input[3]
-      user["age"]=usr_input[4]
+      user["name"]=usr_input[0].strip()
+      user["gender"]=usr_input[1].strip()
+      user["weight"]=usr_input[2].strip()
+      user["height"]=usr_input[3].strip()
+      user["age"]=usr_input[4].strip()
     except:
       bot.send_message(message.chat.id,"Error : ENTER THE CORRECT DETAILS\nUsage : /user <NAME>,<GENDER>,<WEIGHT(kg)>,<HEIGHT(cm)>,<AGE>\nExample : /user Prashanth,Male,80,192,17")
       return -1
