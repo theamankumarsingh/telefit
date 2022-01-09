@@ -73,8 +73,13 @@ def getNutrition(message):
     msg = message.text[11:]
     url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
     lst = []
+    lst = []
     if 'and' in msg:
-        lst = msg.split(' and ')
+        lst = msg.split('and')
+    if ',' in msg:
+        lst = msg.split(',')
+    else:
+        lst.append(msg)
     for i in lst:
         payload = json.dumps({
             "query": i
@@ -112,13 +117,17 @@ def getCaloriesBurn(message):
     lst = []
     if 'and' in msg:
         lst = msg.split('and')
+    if ',' in msg:
+        lst = msg.split(',')
+    else:
+        lst.append(msg)
     for i in lst:
         payload = json.dumps({
             "query": i,
-            "gender": user[1],
-            "weight_kg": int(user[2]),
-            "height_cm": int(user[3]),
-            "age": int(user[4])
+            "gender": user['gender'],
+            "weight_kg": int(user['weight']),
+            "height_cm": int(user['height']),
+            "age": int(user['age'])
         })
     # TODO: 2.3 Get exercise data from the API
         response = requests.request("POST", url, headers=headers, data=payload)
