@@ -169,7 +169,7 @@ def getCaloriesBurn(message):
     
     x=x.split(',')
     for i in range(0,len(x)):
-      if(str(x[i]).lower()=='nutrition'):
+      if(str(x[i]).lower().strip()=='nutrition'):
         buf = io.BytesIO()
         buf.write(nutrition.getvalue().encode())
         buf.seek(0)
@@ -178,7 +178,7 @@ def getCaloriesBurn(message):
           bot.send_document(message.chat.id,buf)
         except:
           bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
-      elif(str(x[i]).lower()=='exercise'):
+      elif(str(x[i]).lower().strip()=='exercise'):
         buf = io.BytesIO()
         buf.write(exercise.getvalue().encode())
         buf.seek(0)
