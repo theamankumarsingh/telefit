@@ -32,7 +32,7 @@ def greet(message):
     nutrition.seek(0)
 
     bot.reply_to(
-        message, 'Hello! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
+        message, 'Hi,Hello,Namaste,Aadam! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
 
 
 @bot.message_handler(commands=['stop', 'bye'])
