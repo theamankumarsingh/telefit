@@ -120,7 +120,6 @@ def getNutrition(message):
     for nutrient in nutrient_list:
         reply += nutrient_dict[nutrient] + ": " + str(nutrient_values[nutrient]) + "\n"
     
-    print(reply)
     bot.send_message(message.chat.id, reply)
     # TODO: 3.2 Dump data in a CSV file
     row = {"Food-Name":nutrient_values["food_name"], "Quantity":nutrient_values["serving_qty"],
@@ -152,7 +151,6 @@ def getCaloriesBurn(message):
     reply = "Exercise Name: " + Exname
     reply += "\nDuration: " + ExDuration
     reply += "\nCalories Burned: " + ExCalories
-    print(reply)
     bot.send_message(message.chat.id, reply)
     # TODO: 3.3 Dump data in a CSV file
     row = {"Exercise-Name": Exname, "Duration": ExDuration, "Calories-Burned":ExCalories}
