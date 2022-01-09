@@ -97,7 +97,7 @@ def getNutrition(message):
     #print(response)
     #bot.send_message(message.chat.id,response)
     data1 = json.loads(response.text)#response.content.decode('utf-8'))
-    bot.send_message(message.chat.id,data1)
+    #bot.send_message(message.chat.id,data1)
     
     quantity=data1['foods'][0]['serving_qty']
     item_name=data1['foods'][0]['food_name']
