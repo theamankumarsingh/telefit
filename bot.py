@@ -1,14 +1,17 @@
 import os
+from dotenv import load_dotenv
 from os import environ
 import telebot
 import requests
 import json
 import csv
-
+load_dotenv()
 # TODO: 1.1 Add Request HTTP URL of the API
-NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
-NUTRITIONIX_APP_ID = environ['NUTRITIONIX_APP_ID']
-HTTP_API = environ['http_api']
+NUTRITIONIX_API_KEY= environ['NUTRITIONIX_API_KEY']
+NUTRITIONIX_APP_ID= environ['NUTRITIONIX_APP_ID']
+HTTP_API= environ['http_api']
+ex_url='https://trackapi.nutritionix.com/v2/natural/exercise'
+nu_url='https://trackapi.nutritionix.com/v2/natural/nutrients'
 
 headers = {'Content-Type': 'application/json',
            'x-app-id': NUTRITIONIX_APP_ID, 'x-app-key': NUTRITIONIX_API_KEY}
@@ -43,8 +46,15 @@ def setUser(message):
     global user
     usr_input = message.text[6:]
     # TODO: 2.1 Set user data
+    userdata = input().split(', ')
+    print(userdata)
+    name = userdata[0]
+    gender = userdata[1]
+    weight = userdata[2]
+    height = userdata[3]
+    age = userdata[4]
     bot.reply_to(message, 'User set!')
-    reply = ''
+    reply = userdata
     # TODO: 2.2 Display user details in the telegram chat
     bot.send_message(message.chat.id, reply)
 
@@ -53,7 +63,14 @@ def setUser(message):
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
     # TODO: 1.2 Get nutrition information from the API
+    text = message.text[11:] 
+    print(text)
+    body = {
+        "query": text
+    }
+    res = requests.post(nu_url,headers= headers, json= body)
     # TODO: 1.3 Display nutrition data in the telegram chat
+    bot.reply_to(message,json)
     # TODO: 3.2 Dump data in a CSV file
 
 
@@ -61,7 +78,19 @@ def getNutrition(message):
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Estimating calories burned...')
     # TODO: 2.3 Get exercise data from the API
+    body = {
+    "query": message.text[10:],
+    "gender": user["gender"],
+    "weight_kg": user["weight"],
+    "height_cm": user["height"],
+    "age": user["age"]
+    }
+    res = requests.post(ex_url,headers= headers, json= body)
+
+    EXERCISE_DATA=fetch('EXERCISE_DATA')
     # TODO: 2.4 Display exercise data in the telegram chat
+    bot/reply_to(message,data)
+    bot.reply_to(message,EXERCISE_DATA)
     # TODO: 3.3 Dump data in a CSV file
 
 
