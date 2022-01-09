@@ -174,10 +174,10 @@ def getCaloriesBurn(message):
         buf.write(nutrition.getvalue().encode())
         buf.seek(0)
         buf.name = f'Nutrition_Report.csv'
-        try:
-          bot.send_document(message.chat.id,buf)
-        except:
-          bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
+        #try:
+        bot.send_document(message.chat.id,buf)
+        #except:
+          #bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
       elif(str(x[i]).lower().strip()=='exercise'):
         buf = io.BytesIO()
         buf.write(exercise.getvalue().encode())
