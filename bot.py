@@ -43,7 +43,7 @@ def setUser(message):
     global user
     usr_input = message.text[6:]
     # TODO: 2.1 Set user data
-    userdata=usr_input
+    user_data=usr_input
     bot.reply_to(message, 'User set!')
     reply = ''
     # TODO: 2.2 Display user details in the telegram chat
@@ -85,3 +85,5 @@ def default(message):
 
 
 bot.infinity_polling()
+
+
