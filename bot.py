@@ -97,22 +97,24 @@ def getNutrition(message):
     #print(response)
     #bot.send_message(message.chat.id,response)
     data1 = json.loads(response.text)#response.content.decode('utf-8'))
-    #bot.send_message(message.chat.id,data1)
-    
-    quantity=data1['foods'][0]['serving_qty']
-    item_name=data1['foods'][0]['food_name']
-    serv_wt=data1['foods'][0]['serving_weight_grams']
-    totfat=data1['foods'][0]['nf_total_fat']
-    satfat=data1['foods'][0]['nf_saturated_fat']
-    chol=data1['foods'][0]['nf_cholesterol']
-    cal=data1['foods'][0]['nf_calories']
-    prot=data1['foods'][0]['nf_protein']
-    carbs=data1['foods'][0]['nf_total_carbohydrate']
-    fibr=data1['foods'][0]['nf_dietary_fiber']
-    pota=data1['foods'][0]['nf_potassium']
-    sod=data1['foods'][0]['nf_sodium']
-    sug=data1['foods'][0]['nf_sugars']
-    
+    #print(data1)
+    try:
+      quantity=data1['foods'][0]['serving_qty']
+      item_name=data1['foods'][0]['food_name']
+      serv_wt=data1['foods'][0]['serving_weight_grams']
+      totfat=data1['foods'][0]['nf_total_fat']
+      satfat=data1['foods'][0]['nf_saturated_fat']
+      chol=data1['foods'][0]['nf_cholesterol']
+      cal=data1['foods'][0]['nf_calories']
+      prot=data1['foods'][0]['nf_protein']
+      carbs=data1['foods'][0]['nf_total_carbohydrate']
+      fibr=data1['foods'][0]['nf_dietary_fiber']
+      pota=data1['foods'][0]['nf_potassium']
+      sod=data1['foods'][0]['nf_sodium']
+      sug=data1['foods'][0]['nf_sugars']
+    except:
+      bot.send_message(message.chat.id,"Error!\nNo food item found"+'\N{confused face}')
+      return -1
     bot.send_message(message.chat.id,"Item Name :"+str(item_name.upper())+"\nTotal Serving Weight(g) : "+str(serv_wt)+"\nQuantity : "+str(quantity)+"\n\nTotal Nutrition Values : "+"\n\nProteins : "+str(prot)+"\nCarbohydrates : "+str(carbs)+"\nCalories : "+str(cal)+"\nCholestrols : "+str(chol)+"\nTotal Fat : "+str(totfat)+"\nSaturated Fat : "+str(satfat)+"\nFibres : "+str(fibr)+"\nPotassium : "+str(pota)+"\nSodium : "+str(sod)+"\nSugars : "+str(sug))
     
     #if(int(x[2])>1):
