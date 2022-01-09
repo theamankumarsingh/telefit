@@ -1,3 +1,9 @@
+## Check-List
+- Completed 3 TODOs from 1.1 to 1.3. 
+- Completed 4 TODOs from 2.1 to 2.4.
+- Completed 3 TODOs from 3.1 to 3.4. Not able to complete 3.4, otherwise I would've executed in heroku. 
+- After the submission though I will try to complete this bot and execute in heroku.
+
 <p align="center"><img src="https://user-images.githubusercontent.com/73401649/148022730-5e42b154-d30f-40d9-ac45-a7320f5b6313.png" alt="JARVIS" width="100%"/></a></p>
 
 ## 📌 Introduction
