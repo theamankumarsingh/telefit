@@ -1,10 +1,13 @@
 import os
 from os import environ
+import re
 import telebot
 import requests
 import json
 import csv
 
+nutirents_url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
+exercise_url = "https://trackapi.nutritionix.com/v2/natural/exercise"
 # TODO: 1.1 Add Request HTTP URL of the API
 NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
 NUTRITIONIX_APP_ID = environ['NUTRITIONIX_APP_ID']
@@ -21,7 +24,10 @@ bot = telebot.TeleBot(HTTP_API)
 def greet(message):
     global botRunning
     botRunning = True
-    # TODO: 3.1 Add CSV file creation
+    file = open('exercise.csv', 'w')
+    file.close()
+    file = open('nutrition.csv', 'w')
+    file.close()
     bot.reply_to(
         message, 'Hello! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
 
@@ -42,38 +48,84 @@ def helpProvider(message):
 def setUser(message):
     global user
     usr_input = message.text[6:]
-    # TODO: 2.1 Set user data
+    usr_data = usr_input.split(",")
+    user['name'] = usr_data[0]
+    user['gender'] = usr_data[1]
+    user['weight'] = usr_data[2]
+    user['height'] = usr_data[3]
+    user['age'] = usr_data[4]
     bot.reply_to(message, 'User set!')
-    reply = ''
-    # TODO: 2.2 Display user details in the telegram chat
+    reply = 'name: ' + str(usr_data[0]) + ' gender: ' + str(usr_data[1]) + ' weight: ' + str(usr_data[2]) + ' height: ' + str(usr_data[3]) + ' age: ' + str(usr_data[4])
     bot.send_message(message.chat.id, reply)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['nutrition'])
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
-    # TODO: 1.2 Get nutrition information from the API
-    # TODO: 1.3 Display nutrition data in the telegram chat
-    # TODO: 3.2 Dump data in a CSV file
+    text = get_nutrition_data(message.text)
+    bot.reply_to(message, text)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Estimating calories burned...')
-    # TODO: 2.3 Get exercise data from the API
-    # TODO: 2.4 Display exercise data in the telegram chat
-    # TODO: 3.3 Dump data in a CSV file
+    response = get_exercise_data(message.text)
+    bot.reply_to(message, response)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Generating report...')
     # TODO: 3.4 Send downlodable CSV file to telegram chat
+  
 
 
 @bot.message_handler(func=lambda message: botRunning)
 def default(message):
     bot.reply_to(message, 'I did not understand '+'\N{confused face}')
 
+######################### DEFINED BY ME ##########################################################
+######################## GET ALL NUTRITION VALUE #################################################
+def get_nutrition_data(text):
+    text = text[11:]
+    payload = {"query" : text}
+    file = open('nutrition.csv', 'w',newline="")
+    writer = csv.writer(file)
+
+    response = requests.post(nutirents_url, headers=headers, data = json.dumps(payload))
+    data = json.loads(response.text)
+    i = 0
+    response_message = ""
+    for key,value in data["foods"][0].items():
+        if(value==None) :
+            continue
+        response_message = response_message + key + ": " + str(value) + "\n"
+        writer.writerow([key,value])
+        i = i + 1
+        if(i > 10):
+            return response_message
+
+#########################FOR GETTING EXERCISE DATA############################################################
+def get_exercise_data(text):
+    text = text[9:]
+    payload = {"query" : text}
+    file = open('exercise.csv', 'w',newline="")
+    writer = csv.writer(file)
+
+    response = requests.post(exercise_url, headers=headers, data = json.dumps(payload))
+    data = json.loads(response.text)
+    i = 0
+    response_message = ""
+    for key,value in data["exercises"][0].items():
+        if(value==None) :
+            continue
+        response_message = response_message + key + ": " + str(value) + "\n"
+        writer.writerow([key,value])
+        i = i + 1
+        if(i > 4):
+            return response_message
+
 
 bot.infinity_polling()
+
+
