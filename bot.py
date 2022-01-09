@@ -6,8 +6,8 @@ import json
 import csv
 import io
 
-NUTRITIONIX_API_KEY = os.getenv('NUTRITIONIX_API_KEY')
-NUTRITIONIX_APP_ID = os.getenv('NUTRITIONIX_APP_ID')
+NUTRITIONIX_API_KEY = 'd29b20ecd0b3b0248d067a90ce8e373e'
+NUTRITIONIX_APP_ID = 'ee36d7b7'
 HTTP_API = os.getenv('API_KEY')
 
 HEADERS = {'Content-Type': 'application/json',
