@@ -412,3 +412,4 @@ pip-selfcheck.json
 
 # csv
 *.csv
+.env
