@@ -5,10 +5,10 @@ import requests
 import json
 import csv
 
-# TODO: 1.1 Add Request HTTP URL of the API
-NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
-NUTRITIONIX_APP_ID = environ['NUTRITIONIX_APP_ID']
-HTTP_API = environ['http_api']
+# TODO: 1.1 Add Request HTTP URL of the API-Done
+NUTRITIONIX_API_KEY = environ.get('NUTRITIONIX_API_KEY')
+NUTRITIONIX_APP_ID = environ.get('NUTRITIONIX_APP_ID')
+HTTP_API = environ.get('http_api')
 
 headers = {'Content-Type': 'application/json',
            'x-app-id': NUTRITIONIX_APP_ID, 'x-app-key': NUTRITIONIX_API_KEY}
