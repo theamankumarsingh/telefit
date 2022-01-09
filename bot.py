@@ -2,6 +2,7 @@ import os
 from os import environ
 import telebot
 import requests
+import pandas as pd
 import json
 import csv
 import re
@@ -13,20 +14,28 @@ HTTP_API = environ['http_api']
 HTTP_URL_NUTRITION = "https://trackapi.nutritionix.com/v2/natural/nutrients"
 HTTP_URL_EXERCISE = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
+NUT_FILE = "csv/nutrition_records.csv"
+EX_FILE = "csv/exercise_records.csv"
+
 headers = {'Content-Type': 'application/json',
            'x-app-id': NUTRITIONIX_APP_ID, 'x-app-key': NUTRITIONIX_API_KEY}
 user = {'name': None, 'gender': None,
         'weight': None, 'height': None, 'age': None}
 
 
-bot = telebot.TeleBot(HTTP_API)
+user_nut = pd.DataFrame()
+user_ex = pd.DataFrame()
 
+bot = telebot.TeleBot(HTTP_API)
 
 @bot.message_handler(commands=['start', 'hello'])
 def greet(message):
     global botRunning
     botRunning = True
     # TODO: 3.1 Add CSV file creation
+    global user_nut, user_ex
+    user_nut = pd.read_csv(NUT_FILE)
+    user_ex = pd.read_csv(EX_FILE)
     bot.reply_to(
         message, 'Hello! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
 
@@ -63,6 +72,7 @@ def setUser(message):
 
 @bot.message_handler(func=lambda message: botRunning, commands=['nutrition'])
 def getNutrition(message):
+    global user_nut, user_ex
     bot.reply_to(message, 'Getting nutrition info...')
     # TODO: 1.2 Get nutrition information from the API
     text = message.text[11:] 
@@ -107,10 +117,14 @@ def getNutrition(message):
     print(reply)
     bot.send_message(message.chat.id, reply)
     # TODO: 3.2 Dump data in a CSV file
-
+    row = {"Food-Name":nutrient_values["food_name"], "Quantity":nutrient_values["serving_qty"],
+    "Calories":nutrient_values["nf_calories"],"Fat":nutrient_values["nf_total_fat"],
+    "Carbohydrate":nutrient_values["nf_total_carbohydrate"], "Protein":nutrient_values["nf_protein"]}
+    user_nut.loc[len(user_nut.index)] = row
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
+    global user_ex
     bot.reply_to(message, 'Estimating calories burned...')
     # TODO: 2.3 Get exercise data from the API
     body = {
@@ -135,13 +149,25 @@ def getCaloriesBurn(message):
     print(reply)
     bot.send_message(message.chat.id, reply)
     # TODO: 3.3 Dump data in a CSV file
+    row = {"Exercise-Name": Exname, "Duration": ExDuration, "Calories-Burned":ExCalories}
+    user_ex.loc[len(user_ex.index)] = row
+    user_ex.to_csv(EX_FILE, index= False)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
+    global user_nut, user_ex
     bot.reply_to(message, 'Generating report...')
-    # TODO: 3.4 Send downlodable CSV file to telegram chat
+    usr_input = message.text[9:]
+    reports = usr_input.split(', ')
 
+    user_nut.to_csv(NUT_FILE, index= False)
+    user_ex.to_csv(EX_FILE, index= False)
+    # TODO: 3.4 Send downlodable CSV file to telegram chat
+    if("nutrition" in reports):
+        bot.send_document(message.chat.id, data= open(NUT_FILE,'rb'))
+    if("exercise" in reports):
+        bot.send_document(message.chat.id, data= open(EX_FILE,'rb'))
 
 @bot.message_handler(func=lambda message: botRunning)
 def default(message):
