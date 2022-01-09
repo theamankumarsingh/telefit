@@ -7,9 +7,9 @@ import csv
 
 from telebot.types import Document
 
-os.environ['NUTRITIONIX_APP_ID'] = 'ec8dd5a9'
-os.environ['http_api'] = '5030645700:AAEiF3t7OZbLMi0uN7qXqWhBE_QK9fu8XjQ'
-os.environ['NUTRITIONIX_API_KEY'] = 'de0c2dd842eec373963e73f21ff601c1'
+os.environ['NUTRITIONIX_APP_ID'] = ''
+os.environ['http_api'] = ''
+os.environ['NUTRITIONIX_API_KEY'] = ''
 
 
 # TODO: 1.1 Add Request HTTP URL of the API
