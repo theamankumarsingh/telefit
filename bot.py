@@ -14,8 +14,8 @@ HTTP_API = environ['http_api']
 HTTP_URL_NUTRITION = "https://trackapi.nutritionix.com/v2/natural/nutrients"
 HTTP_URL_EXERCISE = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
-NUT_FILE = "csv/nutrition_records.csv"
-EX_FILE = "csv/exercise_records.csv"
+NUT_FILE = "nutrition_records.csv"
+EX_FILE = "exercise_records.csv"
 
 headers = {'Content-Type': 'application/json',
            'x-app-id': NUTRITIONIX_APP_ID, 'x-app-key': NUTRITIONIX_API_KEY}
@@ -33,6 +33,12 @@ def greet(message):
     global botRunning
     botRunning = True
     # TODO: 3.1 Add CSV file creation
+    nut_file = open(NUT_FILE,'w')
+    nut_file.write("Food-Name,Quantity,Calories,Fat,Carbohydrate,Protein\n")
+    nut_file.close()
+    ex_file = open(EX_FILE, 'w')
+    ex_file.write("Exercise-Name,Duration,Calories-Burned\n")
+    ex_file.close()
     global user_nut, user_ex
     user_nut = pd.read_csv(NUT_FILE)
     user_ex = pd.read_csv(EX_FILE)
