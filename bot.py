@@ -70,65 +70,84 @@ def setUser(message):
 @bot.message_handler(func=lambda message: botRunning, commands=['nutrition'])
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
-    msg = message.text.split()
+    msg = message.text[11:]
     url = "https://trackapi.nutritionix.com/v2/natural/nutrients"
-    payload = json.dumps({
-        "query": str(" ".join(msg[1:]))
-    })
+    lst = []
+    if 'and' in msg:
+        lst = msg.split(' and ')
+    for i in lst:
+        payload = json.dumps({
+            "query": i
+        })
     # TODO: 1.2 Get nutrition information from the API
-    response = requests.request("POST", url, headers=headers, data=payload)
-    r = response.json()['foods'][0]
-    foodDetails = {
-        'foodName': r['food_name'],
-        'quantity': str(str(r['serving_qty']) +
-                        " " + r['serving_unit']),
-        'calories': r['nf_calories'],
-        'fat': r['nf_total_fat'],
-        'carbohydrate': r['nf_total_carbohydrate'],
-        'protein': r['nf_protein']
-    }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        r = response.json()['foods'][0]
+        foodDetails = {
+            'foodName': r['food_name'],
+            'quantity': str(str(r['serving_qty']) +
+                            " " + r['serving_unit']),
+            'calories': r['nf_calories'],
+            'fat': r['nf_total_fat'],
+            'carbohydrate': r['nf_total_carbohydrate'],
+            'protein': r['nf_protein']
+        }
     # TODO: 1.3 Display nutrition data in the telegram chat
-    bot.reply_to(
-        message, f"So.. Your Dietary values are out.. Check it out \nFood Name: {foodDetails['foodName']} \nQuantity: {foodDetails['quantity']} \nCalories: {foodDetails['calories']} \nFat: {foodDetails['fat']} \nCarbohydrate: {foodDetails['carbohydrate']} \nProtein: {foodDetails['protein']}")
+        bot.reply_to(
+            message, f"So.. Your Dietary values are out.. Check it out \nFood Name: {foodDetails['foodName']} \nQuantity: {foodDetails['quantity']} \nCalories: {foodDetails['calories']} \nFat: {foodDetails['fat']} \nCarbohydrate: {foodDetails['carbohydrate']} \nProtein: {foodDetails['protein']}")
     # TODO: 3.2 Dump data in a CSV file
 
-    foodFile = open('food.csv', 'a')
-    foodFileWrite = csv.writer(foodFile)
-    foodFileWrite.writerow(
-        [foodDetails['foodName'], foodDetails['quantity'], foodDetails['calories'], foodDetails['fat'], foodDetails['carbohydrate'], foodDetails['protein']])
-    foodFile.close()
+        foodFile = open('food.csv', 'a')
+        foodFileWrite = csv.writer(foodFile)
+        foodFileWrite.writerow(
+            [foodDetails['foodName'], foodDetails['quantity'], foodDetails['calories'], foodDetails['fat'], foodDetails['carbohydrate'], foodDetails['protein']])
+        foodFile.close()
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
     bot.reply_to(
         message, "Work Work Till You Sulk.. Here's your estimated calories burned...")
-    msg = message.text.split()
+    msg = message.text[10:]
     url = "https://trackapi.nutritionix.com/v2/natural/exercise"
-    payload = json.dumps({
-        'query': str(" ".join(msg[1:]))
-    })
+    lst = []
+    if 'and' in msg:
+        lst = msg.split('and')
+    for i in lst:
+        payload = json.dumps({
+            "query": i,
+            "gender": user[1],
+            "weight_kg": int(user[2]),
+            "height_cm": int(user[3]),
+            "age": int(user[4])
+        })
     # TODO: 2.3 Get exercise data from the API
-    response = requests.request("POST", url, headers=headers, data=payload)
-    r = response.json()['exercises'][0]
-    workoutDetails = {
-        'exerciseName': r['user_input'],
-        'durationMin': r['duration_min'],
-        'calories': r['nf_calories']
-    }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        r = response.json()['exercises'][0]
     # TODO: 2.4 Display exercise data in the telegram chat
-    bot.reply_to(
-        message, f"Exercise Name: {workoutDetails['exerciseName']} \nDuration: {workoutDetails['durationMin']} minutes \nCalories: {workoutDetails['calories']}")
+        if len(r['exercises']) == 2:
+            reply = 'Exercise Name: ' + str(r['exercises'][1]["name"]) + '\n' + 'Duration: ' + str(
+                r['exercises'][1]["duration_min"]) + '\n' + 'Calories Burned: ' + str(r['exercises'][1]["nf_calories"])
+        else:
+            reply = 'Exercise Name: ' + str(r['exercises'][0]["name"]) + '\n' + 'Duration: ' + str(
+                r['exercises'][0]["duration_min"]) + '\n' + 'Calories Burned: ' + str(r['exercises'][0]["nf_calories"])
+
+        bot.reply_to(message, reply)
     # TODO: 3.3 Dump data in a CSV file
 
-    workoutFile = open('workout.csv', 'a')
-    workoutFileWrite = csv.writer(workoutFile)
-    workoutFileWrite.writerow([workoutDetails['exerciseName'],
-                              workoutDetails['durationMin'], workoutDetails['calories']])
-    workoutFile.close()
+        workoutFile = open('workout.csv', 'a')
+        workoutFileWrite = csv.writer(workoutFile)
+        if len(r["exercises"]) == 2:
+            string = [str(r['exercises'][1]["name"]), int(
+                r['exercises'][1]["duration_min"]), int(r['exercises'][1]["nf_calories"])]
+            workoutFileWrite.writerow(string)
+        else:
+            string = [str(r['exercises'][0]["name"]), int(
+                r['exercises'][0]["duration_min"]), int(r['exercises'][0]["nf_calories"])]
+            workoutFileWrite.writerow(string)
+        workoutFile.close()
 
 
-@bot.message_handler(func=lambda message: botRunning, commands=['reports'])
+@ bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Generating report...')
     # TODO: 3.4 Send downlodable CSV file to telegram chat
@@ -148,7 +167,7 @@ def getCaloriesBurn(message):
         bot.send_document(message.chat.id, doc2)
 
 
-@bot.message_handler(func=lambda message: botRunning)
+@ bot.message_handler(func=lambda message: botRunning)
 def default(message):
     bot.reply_to(message, 'I did not understand '+'\N{confused face}')
 
