@@ -24,12 +24,14 @@ def greet(message):
     global exercise
     botRunning = True
     # TODO: 3.1 Add CSV file creation
-    exercise = io.StringIO()
-    csv.writer(exercise)
-    exercise.seek(0)
-    nutrition = io.StringIO()
-    csv.writer(nutrition)
-    nutrition.seek(0)
+    nutrition_csv = open("nutrition.csv","w")
+    exercise_csv = open("exercise.csv","w")
+    #exercise = io.StringIO()
+    exercise=csv.writer(exercise_csv)
+    #exercise.seek(0)
+    #nutrition = io.StringIO()
+    nutrition=csv.writer(nutrition_csv)
+    #nutrition.seek(0)
 
     bot.reply_to(
         message, 'Hi,Hello,Namaste,Aadam! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
@@ -122,7 +124,7 @@ def getNutrition(message):
     #
     # TODO: 1.3 Display nutrition data in the telegram chat
     # TODO: 3.2 Dump data in a CSV file
-    csv.writer(nutrition).writerow(["Item Name :"+str(item_name.upper()),"Quantity : "+str(quantity),"Total weight(g) : "+str(serv_wt*n),"Proteins : "+str(prot*n),"Carbohydrates : "+str(carbs*n),"Calories : "+str(cal*n),"Cholestrols : "+str(chol*n),"Total Fat : "+str(totfat*n),"Saturated Fat : "+str(satfat*n),"Fibres : "+str(fibr*n),"Potassium : "+str(pota*n),"Sodium : "+str(sod*n),"Sugars : "+str(sug*n)])
+    nutrition.writerow(["Item Name :"+str(item_name.upper()),"Quantity : "+str(quantity),"Total weight(g) : "+str(serv_wt*n),"Proteins : "+str(prot*n),"Carbohydrates : "+str(carbs*n),"Calories : "+str(cal*n),"Cholestrols : "+str(chol*n),"Total Fat : "+str(totfat*n),"Saturated Fat : "+str(satfat*n),"Fibres : "+str(fibr*n),"Potassium : "+str(pota*n),"Sodium : "+str(sod*n),"Sugars : "+str(sug*n)])
     
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
@@ -155,7 +157,7 @@ def getCaloriesBurn(message):
     # TODO: 3.3 Dump data in a CSV file
     #print(data1['exercises'][0]['nf_calories'])
 
-    csv.writer(exercise).writerow(["User Name : "+str(user['name']),"Exercise Done : "+str(inp),"Total calories burnt : "+str(data1['exercises'][0]['nf_calories'])+" calories"])
+    exercise.writerow(["User Name : "+str(user['name']),"Exercise Done : "+str(inp),"Total calories burnt : "+str(data1['exercises'][0]['nf_calories'])+" calories"])
 
 
 
@@ -170,23 +172,27 @@ def getCaloriesBurn(message):
     x=x.split(',')
     for i in range(0,len(x)):
       if(str(x[i]).lower().strip()=='nutrition'):
-        buf = io.BytesIO()
-        buf.write(nutrition.getvalue().encode())
-        buf.seek(0)
-        buf.name = f'Nutrition_Report.csv'
+        #buf = io.BytesIO()
+        #buf.write(nutrition.getvalue().encode())
+        #buf.seek(0)
+        #buf.name = f'Nutrition_Report.csv'
         #try:
-        bot.send_document(message.chat.id,buf)
+        nutrition_csv.close()
+        final_nut=open("nutrition.csv","rb")
+        bot.send_document(message.chat.id,final_nut)
         #except:
           #bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
       elif(str(x[i]).lower().strip()=='exercise'):
-        buf = io.BytesIO()
-        buf.write(exercise.getvalue().encode())
-        buf.seek(0)
-        buf.name = f'Exercise_Report.csv'
-        try:
-          bot.send_document(message.chat.id,buf)
-        except:
-          bot.send_message(message.chat.id,"Use the /exercise command before requesting the nutrition report")
+        #buf = io.BytesIO()
+        #buf.write(exercise.getvalue().encode())
+        #buf.seek(0)
+        #buf.name = f'Exercise_Report.csv'
+        #try:
+        exercise_csv.close()
+        final_exe=open("exercise.csv","rb")
+        bot.send_document(message.chat.id,final_exe)
+        #except:
+          #bot.send_message(message.chat.id,"Use the /exercise command before requesting the nutrition report")
       else:
         bot.send_message(message.chat.id,"Error!!\nNo report found for "+str(x[i]))
 
