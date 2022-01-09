@@ -13,9 +13,6 @@ def send_file(file,file_id):
     return(0)
 
 # TODO: 1.1 Add Request HTTP URL of the API
-os.environ['NUTRITIONIX_API_KEY'] = '90def6c337fde1172fe481c2741f3a79'
-os.environ['NUTRITIONIX_APP_ID'] = 'cd43a2ba'
-os.environ['http_api'] = '5024529250:AAEglZoPDW2MWyouwyHbfxXbkX9b7e9yLEY'
 
 NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
 NUTRITIONIX_APP_ID = environ['NUTRITIONIX_APP_ID']
