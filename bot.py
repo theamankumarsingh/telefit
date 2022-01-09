@@ -5,7 +5,9 @@ import requests
 import json
 import csv
 
-# TODO: 1.1 Add Request HTTP URL of the API
+os.environ['NUTRITIONIX_API_KEY']='6b3da162'
+os.environ['NUTRITIONIX_APP_ID']='1b38c299877e428ac6f777b2312f20e5'
+os.environ['http_api']='5067306912:AAG1xmIce4qvSBmGgYJe7RddqZx9dhAj9tw'
 NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
 NUTRITIONIX_APP_ID = environ['NUTRITIONIX_APP_ID']
 HTTP_API = environ['http_api']
@@ -43,9 +45,14 @@ def setUser(message):
     global user
     usr_input = message.text[6:]
     # TODO: 2.1 Set user data
+    Username=input("Enter name:")
+    Gender=input("Enter your gender:")
+    Mail_id=input("Enter your mail id:")
+    user={'Name':Username,'Gender':Gender,'Mail_id':Mail_id}
     bot.reply_to(message, 'User set!')
     reply = ''
     # TODO: 2.2 Display user details in the telegram chat
+    
     bot.send_message(message.chat.id, reply)
 
 
@@ -53,9 +60,13 @@ def setUser(message):
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
     # TODO: 1.2 Get nutrition information from the API
+    url=https://trackapi.nutritionix.com/v2/natural/nutrients
+    response=requests.post(url,head=headers)
     # TODO: 1.3 Display nutrition data in the telegram chat
+    food={'Food name':'Foods[0][food_name]','Quantity':str(message.text[11:18]),'Calories':str(data['foods'][0]['calories']),'Carbohydrates':str(data['foods'][0]),'Protein':str(data['food'][0]}
+    bot.reply_to(food)
+    
     # TODO: 3.2 Dump data in a CSV file
-
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
