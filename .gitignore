@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+.env
+
 # User-specific files
 *.rsuser
 *.suo
@@ -412,3 +414,9 @@ pip-selfcheck.json
 
 # csv
 *.csv
+<<<<<<< HEAD
+.env
+e.env
+.env
+=======
+>>>>>>> 049bb22b1b70e84d14e518b76fbb694a313ec82a
