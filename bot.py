@@ -85,7 +85,6 @@ def getNutrition(message):
     # TODO: 1.2 Get nutrition information from the API
     result = requests.post(
         "https://trackapi.nutritionix.com/v2/natural/nutrients", headers=headers, json=query)
-    print(result.text)
 
     # TODO: 1.3 Display nutrition data in the telegram chat
     data = json.loads(result.text)
@@ -118,7 +117,6 @@ def getCaloriesBurn(message):
     body = {"query": query, "gender": gender, "weight_kg": weight, "height_cm": height, "age": age}
     result = requests.post(
         "https://trackapi.nutritionix.com/v2/natural/exercise", headers=header, json=body)
-    print(result.text)
     # TODO: 2.4 Display exercise data in the telegram chat
     data = json.loads(result.text)
     exercise_name = data["exercises"][0]["name"]
