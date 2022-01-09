@@ -104,7 +104,9 @@ _Chutzpah*
 # Visual C++ cache files
 ipch/
 *.aps
-*.ncb
+*.ncb response = requests.post(url, headers=headers, json=res)
+    stringText = json.loads(response.text)
+    bot.send_message(stringText)
 *.opendb
 *.opensdf
 *.sdf
@@ -412,3 +414,5 @@ pip-selfcheck.json
 
 # csv
 *.csv
+#env
+.env
