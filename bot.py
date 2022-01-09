@@ -1,6 +1,5 @@
 import os
 from os import environ
-from dotenv import load_dotenv
 from requests.models import Response
 import telebot
 import requests
@@ -8,10 +7,9 @@ import json
 import csv
 
 # TODO: 1.1 Add Request HTTP URL of the API
-load_dotenv
-NUTRITIONIX_API_KEY= environ['NUTRITIONIX_API_KEY']
-NUTRITIONIX_APP_ID= environ['NUTRITIONIX_APP_ID']
-HTTP_API = environ['http_api']
+NUTRITIONIX_API_KEY= '2897e6bed2ebe283fc6c43ce897d417e'
+NUTRITIONIX_APP_ID= 'b0380643'
+HTTP_API = '5042333374:AAEcpswk0eKEwKFkKf-G2MrL1xKn56BpJeI'
 
 headers = {'Content-Type': 'application/json',
            'x-app-id': NUTRITIONIX_APP_ID, 'x-app-key': NUTRITIONIX_API_KEY}
