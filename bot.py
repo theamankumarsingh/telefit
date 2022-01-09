@@ -4,6 +4,9 @@ import telebot
 import requests
 import json
 import csv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # TODO: 1.1 Add Request HTTP URL of the API
 NUTRITIONIX_API_KEY = environ['NUTRITIONIX_API_KEY']
@@ -22,6 +25,9 @@ def greet(message):
     global botRunning
     botRunning = True
     # TODO: 3.1 Add CSV file creation
+    global outputFile
+    outputFile = open('output.csv', 'w', newline='')
+    
     bot.reply_to(
         message, 'Hello! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
 
@@ -43,8 +49,18 @@ def setUser(message):
     global user
     usr_input = message.text[6:]
     # TODO: 2.1 Set user data
+    usr_input = usr_input.split(',')
+    user['name']=usr_input[0]
+    user['gender']=usr_input[1]
+    user['weight']=usr_input[2]
+    user['height']=usr_input[3]
+    user['age']=usr_input[4]
     bot.reply_to(message, 'User set!')
-    reply = ''
+    reply = '''name: %s
+gender: %s
+weight: %s
+height: %s
+age: %s''' %(usr_input[0],usr_input[1],usr_input[2],usr_input[3],usr_input[4])
     # TODO: 2.2 Display user details in the telegram chat
     bot.send_message(message.chat.id, reply)
 
@@ -53,23 +69,48 @@ def setUser(message):
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
     # TODO: 1.2 Get nutrition information from the API
-    # TODO: 1.3 Display nutrition data in the telegram chat
-    # TODO: 3.2 Dump data in a CSV file
 
+    data = {'query':message.text[11:]}
+    result = requests.post('https://trackapi.nutritionix.com/v2/natural/nutrients',headers=headers,data=json.dumps(data))
+    newData = json.loads(result.text)
+
+    # TODO: 1.3 Display nutrition data in the telegram chat
+
+    bot.send_message(message.chat.id,'''Food Name: %s
+Quantity: %s
+Calories: %s
+Fat: %s
+Carbohydrate: %s
+Protein: %s'''%(newData['foods']['food_name'],newData['foods']['serving_qty'],newData['foods']['nf_calories'],newData['foods']['nf_total_fat'],newData['foods']['nf_total_carbohydrate'],newData['foods']['nf_protein'])
+    )
+    # TODO: 3.2 Dump data in a CSV file
+    writer = csv.writer(outputFile)
+    writer.writerow(newData['foods'])
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Estimating calories burned...')
     # TODO: 2.3 Get exercise data from the API
-    # TODO: 2.4 Display exercise data in the telegram chat
-    # TODO: 3.3 Dump data in a CSV file
 
+    data = {'query':message.text[10:]}
+    result = requests.post('https://trackapi.nutritionix.com/v2/natural/exercise',headers=headers,data=json.dumps(data))
+    newData = json.loads(result.text)
+
+    # TODO: 2.4 Display exercise data in the telegram chat
+
+    bot.send_message(message.chat.id,'''Exercise Name: %s
+Duration: %s
+Calories Burned: %s''' %(newData['exercises']['user_input'],newData['exercises']['duration_min'],newData['exercises']['nf_calories'])
+    )
+    # TODO: 3.3 Dump data in a CSV file
+    writer = csv.writer(outputFile)
+    writer.writerow(newData['exercises'])
 
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Generating report...')
     # TODO: 3.4 Send downlodable CSV file to telegram chat
-
+    bot.send_document(message.chat.id,outputFile,protect_content=False)
 
 @bot.message_handler(func=lambda message: botRunning)
 def default(message):
