@@ -47,13 +47,14 @@ def goodbye(message):
 
 @bot.message_handler(func=lambda message: botRunning, commands=['help'])
 def helpProvider(message):
-    bot.reply_to(message, '1.0 You can use \"/nutrition Units Quantity-Type Food-Name\" command to get the nutrients of a particular food. For eg: \"/nutrition 1 piece chapati\"\n\n2.1 For using the bot to get details about an exercise you need to first set the user data using the command \"/user Name, Gender, Weight(in Kg), Height (in cm), Age\". For eg: \"/user Akshat, Male, 70, 6, 19\n\n2.2 Then you can use the command \"/execise Duration-amount Duration-unit Exercise-name\" to get data about an exercise. For eg: \"/exercise 40 minutes push-ups\"\n\n3.0. You can use the command \"/reports Report-name\" to get the reports in CSV Format. For eg: \"/reports nutrition\" to get nutrition report and \"/reports exercise\" to get exercise reports or use the command \"/reports nutrition, exercise\" to get both nutrition and exercise reports\n\n4.0. You can use the command \"/stop\" or the command \"/bye\" to stop the bot.')
+    bot.reply_to(message, '1.0 You can use \"/nutrition Units Quantity-Type Food-Name\" command to get the nutrients of a particular food. For eg: \"/nutrition 1 piece chapati\"\n\n2.1 For using the bot to get details about an exercise you need to first set the user data using the command \"/user Name, Gender, Weight(in Kg), Height (in cm), Age\". For eg: \"/user David, Male, 60, 181, 18\n\n2.2 Then you can use the command \"/execise Duration-amount Duration-unit Exercise-name\" to get data about an exercise. For eg: \"/exercise 40 minutes push-ups\"\n\n3.0. You can use the command \"/reports Report-name\" to get the reports in CSV Format. For eg: \"/reports nutrition\" to get nutrition report and \"/reports exercise\" to get exercise reports or use the command \"/reports nutrition, exercise\" to get both nutrition and exercise reports\n\n4.0. You can use the command \"/stop\" or the command \"/bye\" to stop the bot.')
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['user'])
 def setUser(message):
     global user
     usr_input = message.text[6:].split()
+
     # TODO: 2.1 Set user data (done)
     user['name'] = usr_input[0][:-1]
     user['gender'] = usr_input[1][:-1]
@@ -61,6 +62,7 @@ def setUser(message):
     user['height'] = usr_input[3][:-1]
     user['age'] = usr_input[4]
     bot.reply_to(message, 'User set!')
+
     # TODO: 2.2 Display user details in the telegram chat (done)
     reply = 'Name: '+ user['name'] +'\nGender: ' + user['gender'] + '\nWeight: ' + user['weight'] + '\nHeight: ' + user['height'] + '\nAge: ' + user['age']
     bot.send_message(message.chat.id, reply)
@@ -69,16 +71,19 @@ def setUser(message):
 @bot.message_handler(func=lambda message: botRunning, commands=['nutrition'])
 def getNutrition(message):
     bot.reply_to(message, 'Getting nutrition info...')
+
     # TODO: 1.2 Get nutrition information from the API (done)
     url = 'https://trackapi.nutritionix.com/v2/natural/nutrients'
     myjson = {'query':message.text[11:]}
     response = requests.post(url, headers=headers, json=myjson)
     response.raise_for_status()
     # print(response.text)
+
     # TODO: 1.3 Display nutrition data in the telegram chat (done)
     res = response.json()
     reply = 'Food Name: ' + str(res['foods'][0]['food_name']) + '\nQuantity: ' + str(res['foods'][0]['serving_qty']) +'\nCalories: ' + str(res['foods'][0]['nf_calories']) +'\nFat: ' + str(res['foods'][0]['nf_total_fat']) +'\nCarbohydrates: ' + str(res['foods'][0]['nf_total_carbohydrate']) +'\nProtein: ' + str(res['foods'][0]['nf_protein'])
     bot.send_message(message.chat.id, reply)
+
     # TODO: 3.2 Dump data in a CSV file (done)
     with open('nutrition.csv', 'a', newline='') as file:
         writer = csv.writer(file)
@@ -88,6 +93,7 @@ def getNutrition(message):
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
     bot.reply_to(message, 'Estimating calories burned...')
+
     # TODO: 2.3 Get exercise data from the API (done)
     url = 'https://trackapi.nutritionix.com/v2/natural/exercise'
     myjson = {'query':message.text[10:], 'gender':user['gender'], 'weight_kg':user['weight'], 'height_cm':user['height'], 'age':user['age']}
@@ -111,14 +117,16 @@ def getCaloriesBurn(message):
     bot.reply_to(message, 'Generating report...')
     usr_input = message.text
 
-    # TODO: 3.4 Send downlodable CSV file to telegram chat
+    # TODO: 3.4 Send downlodable CSV file to telegram chat (done)
     if 'nutrition' in usr_input:
         doc = open('./nutrition.csv', 'rb')
         bot.send_document(message.chat.id, doc)
     if 'exercise' in usr_input:
         doc = open('./exercise.csv', 'rb')
         bot.send_document(message.chat.id, doc)
-
+    if 'nutrition' not in usr_input and 'exercise' not in usr_input:
+        reply = 'Invalid arguments, please try again.'
+        bot.send_message(message.chat.id, reply)
 
 @bot.message_handler(func=lambda message: botRunning)
 def default(message):
