@@ -122,7 +122,7 @@ def getCaloriesBurn(message):
     # TODO: 3.3 Dump data in a CSV file
 
     workoutFile = open('workout.csv', 'a')
-    workoutFileWrite = csv.writer(workoutFIle)
+    workoutFileWrite = csv.writer(workoutFile)
     workoutFileWrite.writerow([workoutDetails['exerciseName'],
                               workoutDetails['durationMin'], workoutDetails['calories']])
     workoutFile.close()
