@@ -184,6 +184,7 @@ def getCaloriesBurn(message):
         nutrition_csv.close()
         #final_nut=open("nutrition.csv","rb")
         bot.send_document(message.chat.id,nutrition_csv)
+        nutrition_csv.close()
         #except:
           #bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
       elif(str(x[i]).lower().strip()=='exercise'):
@@ -192,9 +193,10 @@ def getCaloriesBurn(message):
         #buf.seek(0)
         #buf.name = f'Exercise_Report.csv'
         #try:
-        exercise_csv.close()
+        
         #final_exe=open("exercise.csv","rb")
         bot.send_document(message.chat.id,exercise_csv)
+        exercise_csv.close()
         #except:
           #bot.send_message(message.chat.id,"Use the /exercise command before requesting the nutrition report")
       else:
