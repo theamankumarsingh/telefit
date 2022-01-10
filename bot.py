@@ -34,6 +34,8 @@ def greet(message):
     #nutrition = io.StringIO()
     nutrition=csv.writer(nutrition_csv)
     #nutrition.seek(0)
+    exercise.writerow(['Hi'])
+    nutrition.writerow(['Bye'])
 
     bot.reply_to(
         message, 'Hi,Hello,Namaste,Aadam! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
@@ -180,8 +182,8 @@ def getCaloriesBurn(message):
         #buf.name = f'Nutrition_Report.csv'
         #try:
         nutrition_csv.close()
-        final_nut=open("nutrition.csv","rb")
-        bot.send_document(message.chat.id,final_nut)
+        #final_nut=open("nutrition.csv","rb")
+        bot.send_document(message.chat.id,nutrition_csv)
         #except:
           #bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
       elif(str(x[i]).lower().strip()=='exercise'):
@@ -191,8 +193,8 @@ def getCaloriesBurn(message):
         #buf.name = f'Exercise_Report.csv'
         #try:
         exercise_csv.close()
-        final_exe=open("exercise.csv","rb")
-        bot.send_document(message.chat.id,final_exe)
+        #final_exe=open("exercise.csv","rb")
+        bot.send_document(message.chat.id,exercise_csv)
         #except:
           #bot.send_message(message.chat.id,"Use the /exercise command before requesting the nutrition report")
       else:
