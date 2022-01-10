@@ -49,5 +49,5 @@ This is a python telegram bot challenge.
 - Checkout to a branch with your name.
 - Make a PR to the main branch.
 
-## 👀 Live Bot Preview
-- [TeleFit Bot Link](https://t.me/Tele_Fit_Bot)
+## 👀 The Bot I Made
+- [TeleFit Bot Link](https://t.me/manojStelefit_bot)
