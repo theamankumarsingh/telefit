@@ -22,6 +22,8 @@ def greet(message):
     global botRunning
     global nutrition
     global exercise
+    global exercise_csv
+    global nutrition_csv
     botRunning = True
     # TODO: 3.1 Add CSV file creation
     nutrition_csv = open("nutrition.csv","w")
