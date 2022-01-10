@@ -30,7 +30,7 @@ def greet(message):
     csvwriterf = csv.writer(f)
     csvwriterf.writerow(header_nutri)
     f.close()
-    b = open('excercies_details.csv', 'w')
+    b = open('exercies_details.csv', 'w')
     csvwriterb = csv.writer(b)
     csvwriterb.writerow(header_excer)
     b.close()
@@ -111,22 +111,26 @@ def getCaloriesBurn(message):
     d = []
     for i in [excerciseName,excerciseTime,excerciseCal]:
         d.append(i)
-    with open('excercies_details.csv','a') as fe:
+    with open('exercies_details.csv','a') as fe:
         csvwriter = csv.writer(fe)
         csvwriter.writerow(d)
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['reports'])
 def getCaloriesBurn(message):
-    bot.reply_to(message, 'Generating report...')
+    #bot.reply_to(message, 'Generating report...')
     # TODO: 3.4 Send downlodable CSV file to telegram chat
-    greport = message.text[9:]
+    greport = (message.text[9:]).split(',')
     if 'nutrition' in greport:
-        docn = open('/nutrition_details.csv', 'rb')
-        bot.send_document(message.chat.id,docn)
-    if 'excercise' in greport:
-        doce = open('/excercies_details.csv', 'rb')
-        bot.send_document(message.chat.id,doce)
+        bot.reply_to(message, 'Generating Nutritions report...')
+        fileN=open('nutrition_details.csv','rb')
+        bot.send_document(message.chat.id,fileN)
+    if 'exercise' in greport:
+        bot.reply_to(message, 'Generating Exercise report...')
+        fileE=open('exercies_details.csv','rb')
+        bot.send_document(message.chat.id,fileE)
+        
+    
 
 
 @bot.message_handler(func=lambda message: botRunning)
