@@ -127,7 +127,7 @@ def getNutrition(message):
     # TODO: 1.3 Display nutrition data in the telegram chat
     # TODO: 3.2 Dump data in a CSV file
     nutrition.writerow(["Item Name :"+str(item_name.upper()),"Quantity : "+str(quantity),"Total weight(g) : "+str(serv_wt*n),"Proteins : "+str(prot*n),"Carbohydrates : "+str(carbs*n),"Calories : "+str(cal*n),"Cholestrols : "+str(chol*n),"Total Fat : "+str(totfat*n),"Saturated Fat : "+str(satfat*n),"Fibres : "+str(fibr*n),"Potassium : "+str(pota*n),"Sodium : "+str(sod*n),"Sugars : "+str(sug*n)])
-    
+    bot.send_message(message.chat.id,"Updated the cdv file")
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
