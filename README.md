@@ -44,4 +44,4 @@ This is a python telegram bot challenge.
 - Make a PR to the main branch.
 
 ## 👀 Live Bot Preview
-- [TeleFit Bot Link](https://t.me/Tele_Fit_Bot)
+- [TeleFit Bot Link](t.me/T3L3F1Tbot)
