@@ -34,8 +34,8 @@ def greet(message):
     #exercise.seek(0)
     #nutrition = io.StringIO()
     #nutrition.seek(0)
-    exercise.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
-    nutrition.writerow(["User Name","Exercise Done","Total calories burnt"])
+    nutrition.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
+    exercise.writerow(["User Name","Exercise Done","Total calories burnt"])
     exercise_csv.close()
     nutrition_csv.close()
 
@@ -133,7 +133,6 @@ def getNutrition(message):
     nutrition_csv = open("nutrition.csv","a")
     nutrition=csv.writer(nutrition_csv)
     nutrition.writerow([str(item_name.upper()),str(quantity),str(serv_wt*n),str(prot*n),str(carbs*n),str(cal*n),str(chol*n),str(totfat*n),str(satfat*n),str(fibr*n),str(pota*n),str(sod*n),str(sug*n)])
-    bot.send_message(message.chat.id,"Updated the csv file")
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
