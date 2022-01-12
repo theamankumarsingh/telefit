@@ -167,7 +167,7 @@ def getCaloriesBurn(message):
     # TODO: 2.4 Display exercise data in the telegram chat
     # TODO: 3.3 Dump data in a CSV file
     #print(data1['exercises'][0]['nf_calories'])
-    exercise_csv = open("exercise.csv","w")
+    exercise_csv = open("exercise.csv","a")
     #exercise = io.StringIO()
     exercise=csv.writer(exercise_csv)
     exercise.writerow([str(user['name']),str(inp),str(data1['exercises'][0]['nf_calories'])])
