@@ -170,7 +170,7 @@ def getCaloriesBurn(message):
     exercise_csv = open("exercise.csv","w")
     #exercise = io.StringIO()
     exercise=csv.writer(exercise_csv)
-    exercise.writerow([str(user['name']),str(inp.join(' ')),str(data1['exercises'][0]['nf_calories'])])
+    exercise.writerow([str(user['name']),str(inp),str(data1['exercises'][0]['nf_calories'])])
 
 
 
