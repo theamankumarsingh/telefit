@@ -135,7 +135,7 @@ def getNutrition(message):
     # TODO: 3.2 Dump data in a CSV file
     nutrition_csv = open("nutrition.csv","a")
     nutrition=csv.writer(nutrition_csv)
-    nutrition.writerow([str(item_name.upper()),str(quantity),str(serv_wt*n),str(prot*n),str(carbs*n),str(cal*n),str(chol*n),str(totfat*n),str(satfat*n),str(fibr*n),str(pota*n),str(sod*n),str(sug*n)])
+    nutrition.writerow([(item_name.upper()),(quantity),(serv_wt*n),(prot*n),(carbs*n),(cal*n),(chol*n),(totfat*n),(satfat*n),(fibr*n),(pota*n),(sod*n),(sug*n)])
 
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
