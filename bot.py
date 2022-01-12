@@ -35,7 +35,7 @@ def greet(message):
     #nutrition = io.StringIO()
     #nutrition.seek(0)
     exercise.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
-    nutrition.writerow(['Bye'])
+    nutrition.writerow(["User Name","Exercise Done","Total calories burnt"])
     exercise_csv.close()
     nutrition_csv.close()
 
@@ -130,7 +130,7 @@ def getNutrition(message):
     #
     # TODO: 1.3 Display nutrition data in the telegram chat
     # TODO: 3.2 Dump data in a CSV file
-    nutrition_csv = open("nutrition.csv","w")
+    nutrition_csv = open("nutrition.csv","a")
     nutrition=csv.writer(nutrition_csv)
     nutrition.writerow([str(item_name.upper()),str(quantity),str(serv_wt*n),str(prot*n),str(carbs*n),str(cal*n),str(chol*n),str(totfat*n),str(satfat*n),str(fibr*n),str(pota*n),str(sod*n),str(sug*n)])
     bot.send_message(message.chat.id,"Updated the csv file")
@@ -165,8 +165,10 @@ def getCaloriesBurn(message):
     # TODO: 2.4 Display exercise data in the telegram chat
     # TODO: 3.3 Dump data in a CSV file
     #print(data1['exercises'][0]['nf_calories'])
-
-    exercise.writerow(["User Name : "+str(user['name']),"Exercise Done : "+str(inp),"Total calories burnt : "+str(data1['exercises'][0]['nf_calories'])+" calories"])
+    exercise_csv = open("exercise.csv","w")
+    #exercise = io.StringIO()
+    exercise=csv.writer(exercise_csv)
+    exercise.writerow([str(user['name']),str(inp),str(data1['exercises'][0]['nf_calories'])])
 
 
 
@@ -186,10 +188,9 @@ def getCaloriesBurn(message):
         #buf.seek(0)
         #buf.name = f'Nutrition_Report.csv'
         #try:
-        nutrition_csv.close()
-        #final_nut=open("nutrition.csv","rb")
-        bot.send_document(message.chat.id,nutrition_csv)
-        nutrition_csv.close()
+        #nutrition_csv.close()
+        final_nut=open("nutrition.csv","rb")
+        bot.send_document(message.chat.id,final_nut)
         #except:
           #bot.send_message(message.chat.id,"Use the /nutrition command before requesting the nutrition report")
       elif(str(x[i]).lower().strip()=='exercise'):
@@ -200,8 +201,8 @@ def getCaloriesBurn(message):
         #try:
         
         #final_exe=open("exercise.csv","rb")
-        bot.send_document(message.chat.id,exercise_csv)
-        exercise_csv.close()
+        final_exe=open("exercise.csv","rb")
+        bot.send_document(message.chat.id,final_exe)
         #except:
           #bot.send_message(message.chat.id,"Use the /exercise command before requesting the nutrition report")
       else:
