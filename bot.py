@@ -27,17 +27,20 @@ def greet(message):
     botRunning = True
     # TODO: 3.1 Add CSV file creation
     nutrition_csv = open("nutrition.csv","w")
-    exercise_csv = open("exercise.csv","w")
-    #exercise = io.StringIO()
-    exercise=csv.writer(exercise_csv)
     nutrition=csv.writer(nutrition_csv)
+    nutrition.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
+    nutrition_csv.close()
+
+    exercise_csv = open("exercise.csv","w")
+    exercise=csv.writer(exercise_csv)
+    exercise.writerow(["User Name","Exercise Done","Total calories burnt"])    
+    exercise_csv.close()
     #exercise.seek(0)
     #nutrition = io.StringIO()
     #nutrition.seek(0)
-    nutrition.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
-    exercise.writerow(["User Name","Exercise Done","Total calories burnt"])
-    exercise_csv.close()
-    nutrition_csv.close()
+    
+    
+    
 
     bot.reply_to(
         message, 'Hi,Hello,Namaste,Aadam! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
@@ -167,7 +170,7 @@ def getCaloriesBurn(message):
     exercise_csv = open("exercise.csv","w")
     #exercise = io.StringIO()
     exercise=csv.writer(exercise_csv)
-    exercise.writerow([str(user['name']),str(inp),str(data1['exercises'][0]['nf_calories'])])
+    exercise.writerow([str(user['name']),str(inp.join(' ')),str(data1['exercises'][0]['nf_calories'])])
 
 
 
