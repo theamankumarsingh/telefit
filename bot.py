@@ -30,12 +30,14 @@ def greet(message):
     exercise_csv = open("exercise.csv","w")
     #exercise = io.StringIO()
     exercise=csv.writer(exercise_csv)
+    nutrition=csv.writer(nutrition_csv)
     #exercise.seek(0)
     #nutrition = io.StringIO()
-    nutrition=csv.writer(nutrition_csv)
     #nutrition.seek(0)
-    exercise.writerow(['Hi'])
+    exercise.writerow(["Item Name","Quantity","Total weight(g)","Proteins","Carbohydrates","Calories","Cholestrols","Total Fat","Saturated Fat","Fibres","Potassium","Sodium","Sugars"])
     nutrition.writerow(['Bye'])
+    exercise_csv.close()
+    nutrition_csv.close()
 
     bot.reply_to(
         message, 'Hi,Hello,Namaste,Aadam! I am TeleFit. Use me to monitor your health'+'\N{grinning face with smiling eyes}'+'\nYou can use the command \"/help\" to know more about me.')
@@ -128,8 +130,11 @@ def getNutrition(message):
     #
     # TODO: 1.3 Display nutrition data in the telegram chat
     # TODO: 3.2 Dump data in a CSV file
-    nutrition.writerow(["Item Name :"+str(item_name.upper()),"Quantity : "+str(quantity),"Total weight(g) : "+str(serv_wt*n),"Proteins : "+str(prot*n),"Carbohydrates : "+str(carbs*n),"Calories : "+str(cal*n),"Cholestrols : "+str(chol*n),"Total Fat : "+str(totfat*n),"Saturated Fat : "+str(satfat*n),"Fibres : "+str(fibr*n),"Potassium : "+str(pota*n),"Sodium : "+str(sod*n),"Sugars : "+str(sug*n)])
-    bot.send_message(message.chat.id,"Updated the cdv file")
+    nutrition_csv = open("nutrition.csv","w")
+    nutrition=csv.writer(nutrition_csv)
+    nutrition.writerow([str(item_name.upper()),str(quantity),str(serv_wt*n),str(prot*n),str(carbs*n),str(cal*n),str(chol*n),str(totfat*n),str(satfat*n),str(fibr*n),str(pota*n),str(sod*n),str(sug*n)])
+    bot.send_message(message.chat.id,"Updated the csv file")
+
 
 @bot.message_handler(func=lambda message: botRunning, commands=['exercise'])
 def getCaloriesBurn(message):
